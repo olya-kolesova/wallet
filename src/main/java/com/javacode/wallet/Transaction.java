@@ -5,11 +5,17 @@ import java.util.UUID;
 
 
 @Entity
+@Table(name = "transactions")
 public class Transaction {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.UUID)
-    private UUID walletId;
+    @Column(name = "transaction_id")
+    @GeneratedValue
+    private long id;
+
+    @ManyToOne
+    @JoinColumn(name = "wallet_id")
+    private Wallet wallet;
 
     @Enumerated(EnumType.STRING)
     private Operation operationType;
@@ -34,17 +40,18 @@ public class Transaction {
 
     public Transaction() {}
 
-    public Transaction(String operation, Long amount) {
+    public Transaction(Wallet wallet, String operation, Long amount) {
+        this.wallet = wallet;
         this.operationType = Operation.valueOf(operation);
         this.amount = amount;
     }
 
-    public UUID getWalletId() {
-        return walletId;
+    public Wallet getWallet() {
+        return wallet;
     }
 
-    public void setWalletId(UUID walletId) {
-        this.walletId = walletId;
+    public void setWallet(Wallet wallet) {
+        this.wallet = wallet;
     }
 
     public Operation getOperationType() {

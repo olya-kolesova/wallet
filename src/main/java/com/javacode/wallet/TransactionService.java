@@ -24,12 +24,16 @@ public class TransactionService {
         }
     }
 
-    public Transaction saveTransaction(Transaction transaction) {
-        return transactionRepository.save(transaction);
+    public boolean isAmountValid(long amount, long balance, String operation) {
+        if (operation.equals("WITHDRAW")) {
+            return amount <= balance && amount >= 0;
+        } else {
+            return amount >= balance;
+        }
     }
 
-    public UUID convertToUuid(String uuid) throws IllegalArgumentException {
-        return UUID.fromString(uuid);
+    public void saveTransaction(Transaction transaction) {
+        transactionRepository.save(transaction);
     }
 
     public Transaction findTransactionById(UUID walletId) {
