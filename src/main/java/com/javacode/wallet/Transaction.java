@@ -1,7 +1,7 @@
 package com.javacode.wallet;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import java.util.UUID;
 
 
 @Entity
@@ -13,7 +13,8 @@ public class Transaction {
     @GeneratedValue
     private long id;
 
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "wallet_id")
     private Wallet wallet;
 

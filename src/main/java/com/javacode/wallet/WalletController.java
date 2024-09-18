@@ -34,6 +34,7 @@ public class WalletController {
             Wallet wallet;
             if (transactionBuilder.getWalletId() == null) {
                  wallet = walletService.createWallet();
+                System.out.println("I created new wallet just now!");
             } else {
                 try {
                     UUID id = walletService.convertToUuid(transactionBuilder.getWalletId());
@@ -41,7 +42,7 @@ public class WalletController {
 
                 } catch (IllegalArgumentException e) {
                     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-                } catch (NoSuchElementException) {
+                } catch (NoSuchElementException e) {
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 }
             }
@@ -49,7 +50,8 @@ public class WalletController {
                 transactionBuilder.getOperationType())) {
                 transactionBuilder.setWallet(wallet);
                 Transaction transaction = transactionBuilder.build();
-                wallet.
+                wallet.addTransaction(transaction);
+                walletService.makeTransaction(wallet, transaction);
                 transactionService.saveTransaction(transaction);
                 return new ResponseEntity<>(transaction, HttpStatus.OK);
             } else {
@@ -62,12 +64,12 @@ public class WalletController {
     }
 
     @GetMapping("api/v1/wallet/{WALLET_UUID}")
-    public ResponseEntity<Object> getTransactionById(@PathVariable String WALLET_UUID) {
+    public ResponseEntity<Object> getWalletById(@PathVariable String WALLET_UUID) {
         try {
             UUID walletId = walletService.convertToUuid(WALLET_UUID);
             try {
-                Transaction transaction = transactionService.findTransactionById(walletId);
-                return new ResponseEntity<>(transaction, HttpStatus.OK);
+                Wallet wallet = walletService.findWalletById(walletId);
+                return new ResponseEntity<>(wallet, HttpStatus.OK);
             } catch (IllegalArgumentException exception) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }

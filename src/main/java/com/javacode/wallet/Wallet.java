@@ -1,6 +1,11 @@
 package com.javacode.wallet;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +21,8 @@ public class Wallet {
 
     private long balance;
 
-    @OneToMany(mappedBy = "wallet")
+    @Fetch(FetchMode.SUBSELECT)
+    @OneToMany(mappedBy = "wallet", fetch = FetchType.LAZY)
     private List<Transaction> transactions = new ArrayList<>();
 
     public Wallet() {
@@ -45,6 +51,10 @@ public class Wallet {
 
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
+    }
+
+    public void addTransaction(Transaction transaction) {
+        this.transactions.add(transaction);
     }
 
 

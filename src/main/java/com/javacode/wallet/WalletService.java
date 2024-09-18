@@ -4,6 +4,7 @@ import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -39,12 +40,15 @@ public class WalletService {
             () -> new NoSuchElementException("Wallet not found"));
     }
 
+    @Transactional
     public void makeTransaction(Wallet wallet, Transaction transaction) {
-        switch(transaction.getOperationType()) {
-            case DEPOSIT:
-                wallet.setBalance(wallet.getBalance() + transaction.getAmount());
-            case WITHDRAW:
-                wallet.setBalance(wallet.getBalance() - transaction.getAmount());
+        long newBalance;
+        if (transaction.getOperationType().getOperation().equals("DEPOSIT")) {
+            newBalance = wallet.getBalance() + transaction.getAmount();
+            wallet.setBalance(newBalance);
+        } else {
+            newBalance = wallet.getBalance() - transaction.getAmount();
+            wallet.setBalance(newBalance);
         }
         updateWallet(wallet);
     }
