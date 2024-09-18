@@ -1,8 +1,9 @@
-package com.javacode.wallet;
+package com.javacode.wallet.service;
 
-import org.springframework.data.crossstore.ChangeSetPersister;
+import com.javacode.wallet.repository.WalletRepository;
+import com.javacode.wallet.model.Transaction;
+import com.javacode.wallet.model.Wallet;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 
 import javax.transaction.Transactional;
 import java.util.List;

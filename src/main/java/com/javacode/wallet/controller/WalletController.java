@@ -1,5 +1,11 @@
-package com.javacode.wallet;
+package com.javacode.wallet.controller;
 
+import com.javacode.wallet.TransactionBuilder;
+import com.javacode.wallet.TransactionResponse;
+import com.javacode.wallet.model.Transaction;
+import com.javacode.wallet.model.Wallet;
+import com.javacode.wallet.service.TransactionService;
+import com.javacode.wallet.service.WalletService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +40,6 @@ public class WalletController {
             Wallet wallet;
             if (transactionBuilder.getWalletId() == null) {
                  wallet = walletService.createWallet();
-                System.out.println("I created new wallet just now!");
             } else {
                 try {
                     UUID id = walletService.convertToUuid(transactionBuilder.getWalletId());
@@ -53,7 +58,9 @@ public class WalletController {
                 wallet.addTransaction(transaction);
                 walletService.makeTransaction(wallet, transaction);
                 transactionService.saveTransaction(transaction);
-                return new ResponseEntity<>(transaction, HttpStatus.OK);
+                TransactionResponse transactionResponse = new TransactionResponse(wallet.getId().toString(),
+                    wallet.getBalance(), transaction.getAmount(), transaction.getOperationType().getOperation());
+                return new ResponseEntity<>(transactionResponse, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }

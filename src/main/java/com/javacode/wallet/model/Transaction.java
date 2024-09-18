@@ -1,4 +1,4 @@
-package com.javacode.wallet;
+package com.javacode.wallet.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

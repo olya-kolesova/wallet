@@ -1,5 +1,7 @@
-package com.javacode.wallet;
+package com.javacode.wallet.service;
 
+import com.javacode.wallet.model.Transaction;
+import com.javacode.wallet.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

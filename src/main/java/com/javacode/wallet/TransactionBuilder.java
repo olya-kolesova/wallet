@@ -1,5 +1,8 @@
 package com.javacode.wallet;
 
+import com.javacode.wallet.model.Transaction;
+import com.javacode.wallet.model.Wallet;
+
 public class TransactionBuilder {
 
     private String walletId;
@@ -40,7 +43,7 @@ public class TransactionBuilder {
     }
 
 
-    Transaction build() {
+    public Transaction build() {
         return new Transaction(wallet, operationType, amount);
     }
 
