@@ -1,19 +1,19 @@
 package com.javacode.wallet;
 
 import jakarta.persistence.*;
+import java.util.UUID;
 
 @Entity
 public class Transaction {
 
     @Id
-    @GeneratedValue
-    private Long walletId;
+    @GeneratedValue(strategy=GenerationType.UUID)
+    private UUID walletId;
 
     @Enumerated(EnumType.STRING)
     private Operation operationType;
 
     private Long amount;
-
 
 
     public enum Operation {

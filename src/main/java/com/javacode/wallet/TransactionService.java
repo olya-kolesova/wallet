@@ -1,5 +1,11 @@
 package com.javacode.wallet;
 
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+
+@Service
 public class TransactionService {
 
     private final TransactionRepository transactionRepository;
@@ -12,5 +18,8 @@ public class TransactionService {
         transactionRepository.save(transaction);
     }
 
-    public Transaction
+    public List<Transaction> getAllTransactions() {
+        return transactionRepository.findAll();
+    }
+
 }
