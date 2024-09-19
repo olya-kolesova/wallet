@@ -1,21 +1,10 @@
 package com.javacode.wallet.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.javacode.wallet.TransactionBuilder;
-import com.javacode.wallet.TransactionResponse;
-import com.javacode.wallet.model.Transaction;
 import com.javacode.wallet.model.Wallet;
-import com.javacode.wallet.repository.WalletRepository;
-import com.javacode.wallet.service.WalletService;
-import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import jakarta.annotation.PostConstruct;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -26,14 +15,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.*;
 
 import static io.restassured.RestAssured.get;
-import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static io.restassured.module.jsv.JsonSchemaValidator.*;
-import io.restassured.RestAssured;
-import io.restassured.parsing.Parser;
-import org.springframework.web.context.WebApplicationContext;
-
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
