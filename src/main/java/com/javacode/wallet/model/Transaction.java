@@ -3,6 +3,8 @@ package com.javacode.wallet.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 
 @Entity
 @Table(name = "transactions")
@@ -69,5 +71,18 @@ public class Transaction {
 
     public void setAmount(Long amount) {
         this.amount = amount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Transaction that = (Transaction) o;
+        return id == that.id && Objects.equals(wallet, that.wallet) && operationType == that.operationType && Objects.equals(amount, that.amount);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, wallet, operationType, amount);
     }
 }

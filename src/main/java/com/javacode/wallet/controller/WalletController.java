@@ -38,11 +38,9 @@ public class WalletController {
     public ResponseEntity<Object> requestTransaction(@RequestBody TransactionBuilder transactionBuilder) {
         if (transactionService.isOperationValid(transactionBuilder.getOperationType())) {
             Wallet wallet;
-            if (transactionBuilder.getWalletId() == null) {
-                 wallet = walletService.createWallet();
-            } else {
+            if (transactionBuilder.getWalletId().isPresent()) {
                 try {
-                    UUID id = walletService.convertToUuid(transactionBuilder.getWalletId());
+                    UUID id = walletService.convertToUuid(transactionBuilder.getWalletId().get());
                     wallet = walletService.findWalletById(id);
 
                 } catch (IllegalArgumentException e) {
@@ -50,6 +48,8 @@ public class WalletController {
                 } catch (NoSuchElementException e) {
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 }
+            } else {
+                wallet = walletService.createWallet();
             }
             if (transactionService.isAmountValid(transactionBuilder.getAmount(), wallet.getBalance(),
                 transactionBuilder.getOperationType())) {

@@ -3,23 +3,25 @@ package com.javacode.wallet;
 import com.javacode.wallet.model.Transaction;
 import com.javacode.wallet.model.Wallet;
 
+import java.util.Optional;
+
 public class TransactionBuilder {
 
-    private String walletId;
+    private Optional<String> walletId;
     private Wallet wallet;
     private String operationType;
     private long amount;
 
 
-    private TransactionBuilder() {
+    public TransactionBuilder() {
     }
 
-    public String getWalletId() {
+    public Optional<String> getWalletId() {
         return walletId;
     }
 
     public void setWalletId(String walletId) {
-        this.walletId = walletId;
+        this.walletId = Optional.ofNullable(walletId);
     }
 
     public String getOperationType() {
@@ -46,6 +48,5 @@ public class TransactionBuilder {
     public Transaction build() {
         return new Transaction(wallet, operationType, amount);
     }
-
 
 }

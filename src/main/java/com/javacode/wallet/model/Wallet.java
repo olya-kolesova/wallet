@@ -6,6 +6,7 @@ import org.hibernate.annotations.FetchMode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -24,6 +25,11 @@ public class Wallet {
 
     public Wallet() {
         this.balance = 0;
+    }
+
+    public Wallet(UUID id, long balance) {
+        this.id = id;
+        this.balance = balance;
     }
 
     public UUID getId() {
@@ -55,4 +61,16 @@ public class Wallet {
     }
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Wallet wallet = (Wallet) o;
+        return balance == wallet.balance && Objects.equals(id, wallet.id) && Objects.equals(transactions, wallet.transactions);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }
