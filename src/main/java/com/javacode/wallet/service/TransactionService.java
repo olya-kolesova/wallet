@@ -26,13 +26,13 @@ public class TransactionService {
         }
     }
 
-    public boolean isAmountValid(long amount, long balance, String operation) {
-        if (operation.equals("WITHDRAW")) {
-            return amount <= balance && amount >= 0;
-        } else {
-            return amount >= balance;
-        }
-    }
+//    public boolean isAmountValid(long amount, long balance, String operation) {
+//        if (operation.equals("WITHDRAW")) {
+//            return amount <= balance && amount >= 0;
+//        } else {
+//            return amount >= balance;
+//        }
+//    }
 
     public void saveTransaction(Transaction transaction) {
         transactionRepository.save(transaction);

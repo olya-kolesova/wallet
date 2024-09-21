@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public class TransactionBuilder {
 
-    private Optional<String> walletId;
+    private String walletId;
     private Wallet wallet;
     private String operationType;
     private long amount;
@@ -16,12 +16,12 @@ public class TransactionBuilder {
     public TransactionBuilder() {
     }
 
-    public Optional<String> getWalletId() {
+    public String getWalletId() {
         return walletId;
     }
 
     public void setWalletId(String walletId) {
-        this.walletId = Optional.ofNullable(walletId);
+        this.walletId = walletId;
     }
 
     public String getOperationType() {
