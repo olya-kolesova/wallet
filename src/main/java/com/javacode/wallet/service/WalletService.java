@@ -3,8 +3,6 @@ package com.javacode.wallet.service;
 import com.javacode.wallet.repository.WalletRepository;
 import com.javacode.wallet.model.Transaction;
 import com.javacode.wallet.model.Wallet;
-import jakarta.persistence.LockModeType;
-import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -17,12 +15,13 @@ import java.util.UUID;
 
 @Service
 public class WalletService {
-    private WalletRepository walletRepository;
+    private final WalletRepository walletRepository;
 
     public WalletService(WalletRepository walletRepository) {
         this.walletRepository = walletRepository;
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public Wallet saveWallet(Wallet wallet) {
         return walletRepository.save(wallet);
     }
@@ -39,6 +38,7 @@ public class WalletService {
         }
     }
 
+    @Transactional
     public Wallet createWallet() {
         Wallet wallet = new Wallet();
         return saveWallet(wallet);
@@ -48,17 +48,16 @@ public class WalletService {
         return UUID.fromString(uuid);
     }
 
-
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public Wallet findWalletById(UUID uuid) throws NoSuchElementException {
         return walletRepository.findById(uuid).orElseThrow(
             () -> new NoSuchElementException("Wallet not found"));
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE)
-    public Transaction makeTransaction(Transaction transaction, Optional<String> walletId) throws IllegalArgumentException, NullPointerException {
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
+    public Transaction makeTransaction(Transaction transaction, Optional<String> walletId) throws IllegalArgumentException, NoSuchElementException {
         long newBalance;
         Wallet wallet = null;
-        System.out.println("mistake before find");
         wallet = walletId.map(s -> (walletRepository.findById(convertToUuid(s))).orElseThrow()).orElseGet(this::createWallet);
         if (isAmountValid(transaction, wallet)) {
             switch(transaction.getOperationType().getOperation()) {
@@ -73,8 +72,7 @@ public class WalletService {
             }
             transaction.setWallet(wallet);
             wallet.addTransaction(transaction);
-            System.out.println("mistake before saving");
-            walletRepository.saveAndFlush(wallet);
+            walletRepository.save(wallet);
             return transaction;
         } else {
             throw new IllegalArgumentException("Invalid transaction");
@@ -84,7 +82,5 @@ public class WalletService {
     public List<Wallet> getAllWallets() {
       return walletRepository.findAll();
     }
-
-
 
 }

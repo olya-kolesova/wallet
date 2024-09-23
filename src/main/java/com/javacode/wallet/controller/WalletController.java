@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -40,30 +39,15 @@ public class WalletController {
         if (transactionService.isOperationValid(transactionBuilder.getOperationType())) {
             Optional<String> walletId = Optional.ofNullable(transactionBuilder.getWalletId());
             Transaction transaction = transactionBuilder.build();
-            try {
-               Transaction returnedtransaction = walletService.makeTransaction(transaction, walletId);
-                transactionService.saveTransaction(transaction);
-                Wallet wallet = transaction.getWallet();
-                TransactionResponse transactionResponse = new TransactionResponse(wallet.getId().toString(),
-                    wallet.getBalance(), transaction.getAmount(), transaction.getOperationType().getOperation());
-                return new ResponseEntity<>(transactionResponse, HttpStatus.OK);
-            } catch (Exception exception) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
+           Transaction returnedTransaction = walletService.makeTransaction(transaction, walletId);
+            transactionService.saveTransaction(transaction);
+            Wallet wallet = returnedTransaction.getWallet();
+            TransactionResponse transactionResponse = new TransactionResponse(wallet.getId().toString(),
+                wallet.getBalance(), transaction.getAmount(), transaction.getOperationType().getOperation());
+            return new ResponseEntity<>(transactionResponse, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-//                walletService.makeTransaction(wallet, transaction);
-//                transactionService.saveTransaction(transaction);
-//                TransactionResponse transactionResponse = new TransactionResponse(wallet.getId().toString(),
-//                    wallet.getBalance(), transaction.getAmount(), transaction.getOperationType().getOperation());
-//                return new ResponseEntity<>(transactionResponse, HttpStatus.OK);
-//            } else {
-//                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//            }
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
 
     }
 
